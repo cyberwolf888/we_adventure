@@ -15,7 +15,10 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/contact', 'HomeController@contact')->name('contact');
-
+Route::get('/category/{id}', 'HomeController@category')->name('category');
+Route::get('/product/{id}', 'HomeController@product')->name('product');
+Route::get('/search', 'HomeController@search')->name('search');
+Route::post('/cart_add', 'HomeController@cart_add')->name('cart_add');
 
 //Backend
 Route::group(['prefix' => 'backend', 'middleware' => ['auth','role:admin-access|owner-access'], 'as'=>'backend'], function() {

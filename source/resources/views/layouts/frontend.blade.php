@@ -7,6 +7,7 @@
     <meta name="keywords" content="HTML5,CSS3,HTML,Template,Multi-Purpose,M_Adnan,Corporate Theme,SEBIAN Multi Purpose Care,eCommerce,SEBIAN - Multi Purpose eCommerce HTML5 Template">
     <meta name="description" content="SEBIAN - Multi Purpose eCommerce HTML5 Template">
     <meta name="author" content="M_Adnan">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- FONTS ONLINE -->
     <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
@@ -70,43 +71,41 @@
                     <ul class="ownmenu">
                         <li class="active"><a href="{{ route('home') }}">HOME</a></li>
                         @foreach(\App\Models\Category::all() as $category)
-                            <li><a href="#">{{ $category->name }}</a></li>
+                            <li><a href="{{ route('category',$category->id) }}">{{ $category->name }}</a></li>
                         @endforeach
                         <li><a href="{{ route('contact') }}">CONTACT</a></li>
                         <li><a href="{{ url('login') }}">LOGIN</a></li>
 
                         <!--======= Shopping Cart =========-->
-                        <li class="shop-cart"><a href="index-09-furniture.html#."><i class="fa fa-shopping-cart"></i></a> <span class="numb">2</span>
+                        <li class="shop-cart"><a href="#"><i class="fa fa-shopping-cart"></i></a> <span class="numb">{{ \Cart::instance('cart')->count() }}</span>
                             <ul class="dropdown">
-                                <li>
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <div class="cart-img"> <a href="index-09-furniture.html#"> <img class="media-object img-responsive" src="{{ url('assets/frontend') }}/images/item-col-img-1.jpg" alt="..."> </a> </div>
+                                @if(\Cart::instance('cart')->count()>0)
+                                    @foreach(Cart::instance('cart')->content() as $row)
+                                    <li>
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <div class="cart-img"> <a href="{{ route('product',$row->model->id) }}"> <img class="media-object img-responsive" src="{{ $row->model->getImage() }}" alt="..."> </a> </div>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">{{ $row->name }}</h6>
+                                                <span class="price">IDR {{ number_format($row->model->price-($row->model->price*$row->model->discount/100),0,',','.') }}</span> <span class="qty">QTY: {{ $row->qty }}</span> </div>
                                         </div>
-                                        <div class="media-body">
-                                            <h6 class="media-heading">DRAEY TRENCH COAT</h6>
-                                            <span class="price">129.00 USD</span> <span class="qty">QTY: 01</span> </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <div class="cart-img"> <a href="index-09-furniture.html#"> <img class="media-object img-responsive" src="{{ url('assets/frontend') }}/images/item-col-img-2.jpg" alt="..."> </a> </div>
+                                    </li>
+                                    @endforeach
+                                    <li class="no-padding no-border">
+                                        <div class="row">
+                                            <div class="col-xs-6"> <a href="#" class="btn btn-small">VIEW CART</a></div>
+                                            <div class="col-xs-6 "> <a href="#" class="btn btn-1 btn-small">CHECK OUT</a></div>
                                         </div>
-                                        <div class="media-body">
-                                            <h6 class="media-heading">DRAEY TRENCH COAT</h6>
-                                            <span class="price">129.00 USD</span> <span class="qty">QTY: 01</span> </div>
-                                    </div>
-                                </li>
-                                <li class="no-padding no-border">
-                                    <h5 class="text-center">SUBTOTAL: 258.00 USD</h5>
-                                </li>
-                                <li class="no-padding no-border">
-                                    <div class="row">
-                                        <div class="col-xs-6"> <a href="index-09-furniture.html#." class="btn btn-small">VIEW CART</a></div>
-                                        <div class="col-xs-6 "> <a href="index-09-furniture.html#." class="btn btn-1 btn-small">CHECK OUT</a></div>
-                                    </div>
-                                </li>
+                                    </li>
+                                @else
+                                    <li class="no-padding no-border">
+                                        <div class="row">
+                                            <div class="col-xs-12"> <h3 style="color: white;">Cart is empty</h3></div>
+                                        </div>
+                                    </li>
+
+                                @endif
                             </ul>
                         </li>
                         <!--======= SEARCH ICON =========-->
@@ -114,8 +113,10 @@
                             <ul class="dropdown">
                                 <li class="row">
                                     <div class="col-sm-12 no-padding">
-                                        <input type="search" class="form-control" placeholder="Search Here">
-                                        <button type="submit"> <i class="fa fa-search"></i> </button>
+                                        <form method="get" action="{{ url('search') }}">
+                                            <input type="search" class="form-control" placeholder="Search Here" name="keyword">
+                                            <button type="submit"> <i class="fa fa-search"></i> </button>
+                                        </form>
                                     </div>
                                 </li>
                             </ul>
@@ -145,13 +146,11 @@
 
                         <!--  INFOMATION -->
                         <li class="col-sm-6">
-                            <h5>INFOMATION</h5>
+                            <h5>CATEGORY</h5>
                             <ul class="f-links">
-                                <li><a href="index-09-furniture.html#.">ABOUT US</a></li>
-                                <li><a href="index-09-furniture.html#."> DELIVERY INFOMATION</a></li>
-                                <li><a href="index-09-furniture.html#."> PRIVACY & POLICY</a></li>
-                                <li><a href="index-09-furniture.html#."> TEMRS & CONDITIONS</a></li>
-                                <li><a href="index-09-furniture.html#."> MANUFACTURES</a></li>
+                                @foreach(\App\Models\Category::orderBy('created_at','DESC')->limit(6)->get() as $row)
+                                <li><a href="{{ route('category',$row->id) }}">{{ $row->name }}</a></li>
+                                @endforeach
                             </ul>
                         </li>
 
@@ -162,7 +161,6 @@
                                 <li><a href="index-09-furniture.html#.">MY ACCOUNT</a></li>
                                 <li><a href="index-09-furniture.html#."> LOGIN</a></li>
                                 <li><a href="index-09-furniture.html#."> MY CART</a></li>
-                                <li><a href="index-09-furniture.html#."> WISHLIST</a></li>
                                 <li><a href="index-09-furniture.html#."> CHECKOUT</a></li>
                             </ul>
                         </li>
@@ -181,14 +179,11 @@
 
                         <!-- FLICKR PHOTO -->
                         <li class="col-sm-6">
-                            <h5>FLICKR PHOTO</h5>
+                            <h5>LAST PRODUCT</h5>
                             <ul class="flicker">
-                                <li><a href="index-09-furniture.html#."><img src="{{ url('assets/frontend') }}/images/flicker-1.jpg" alt=""></a></li>
-                                <li><a href="index-09-furniture.html#."><img src="{{ url('assets/frontend') }}/images/flicker-2.jpg" alt=""></a></li>
-                                <li><a href="index-09-furniture.html#."><img src="{{ url('assets/frontend') }}/images/flicker-3.jpg" alt=""></a></li>
-                                <li><a href="index-09-furniture.html#."><img src="{{ url('assets/frontend') }}/images/flicker-4.jpg" alt=""></a></li>
-                                <li><a href="index-09-furniture.html#."><img src="{{ url('assets/frontend') }}/images/flicker-5.jpg" alt=""></a></li>
-                                <li><a href="index-09-furniture.html#."><img src="{{ url('assets/frontend') }}/images/flicker-6.jpg" alt=""></a></li>
+                                @foreach(\App\Models\Product::orderBy('created_at','DESC')->limit(6)->get() as $row)
+                                <li><a href="{{ route('product',$row->id) }}"><img src="{{ $row->getImage() }}" alt=""></a></li>
+                                @endforeach
                             </ul>
                         </li>
                     </ul>
@@ -197,7 +192,7 @@
 
             <!-- Rights -->
             <div class="rights">
-                <p>© {{ date('Y') }} STMIK STIKOM Bali. All Rights Reserved.</p>
+                <p>© {{ date('Y') }} WE ADVENTURE. All Rights Reserved.</p>
             </div>
         </div>
     </footer>

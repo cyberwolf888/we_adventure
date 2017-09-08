@@ -80,7 +80,7 @@
                             <div class="media">
                                 <div class="media-left">
                                     <!--  Image -->
-                                    <div class="avatar"> <a href="#"> <img class="media-object" src="images/avatar-11.jpg" alt=""> </a> </div>
+                                    <div class="avatar"> <a href="#"> <img class="media-object" src="{{ url('assets/frontend') }}/images/avatar-11.jpg" alt=""> </a> </div>
                                 </div>
                                 <!--  Details -->
                                 <div class="media-body">
@@ -97,7 +97,7 @@
 @endsection
 
 @push('plugin_scripts')
-<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false'></script>
+<script type='text/javascript' src='http://maps.google.com/maps/api/js?key=AIzaSyBrPaLGlRACA4PTTaJdtvn9Vw3VYQRU8Xg'></script>
 @endpush
 
 @push('scripts')
@@ -121,8 +121,7 @@
             var marker = new google.maps.Marker({
                 position: myLatLng,
                 map: map,
-                tittle: 'Envato',
-                icon: './images/map-locator.png'
+                tittle: 'Lokasi Kantor'
             });
         } else {
             return false;
