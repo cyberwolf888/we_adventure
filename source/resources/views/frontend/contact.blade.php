@@ -33,14 +33,13 @@
                             <h6>SHOP LOCATION</h6>
                             <ul class="location">
                                 <li> <i class="fa fa-location-arrow"></i>
-                                    <p>1234 Heaven Stress, Beverly
-                                        United State</p>
+                                    <p>{{ env('APP_ALAMAT') }}</p>
                                 </li>
                                 <li> <i class="fa fa-phone"></i>
-                                    <p>Phone: (800) 0123 4567 890</p>
+                                    <p>Phone: {{ env('APP_PHONE') }}</p>
                                 </li>
                                 <li> <i class="fa fa-envelope"></i>
-                                    <p>Support@democompany.com</p>
+                                    <p>{{ env('APP_EMAIL') }}</p>
                                 </li>
                                 <li> <i class="fa fa-clock-o"></i>
                                     <p>OPEN: 9AM - 8PM</p>

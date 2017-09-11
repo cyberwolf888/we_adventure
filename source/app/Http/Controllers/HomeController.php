@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductDetail;
+use App\Models\Transaction;
+use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
 use Cart;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -65,7 +68,7 @@ class HomeController extends Controller
 
     public function cart()
     {
-
+        return view('frontend.cart');
     }
 
     public function cart_add(Request $request)
@@ -87,5 +90,62 @@ class HomeController extends Controller
         return response()->json([
             'status' => '1'
         ]);
+    }
+
+    public function cart_clear()
+    {
+        Cart::instance('cart')->destroy();
+        return redirect()->back();
+    }
+
+    public function cart_delete(Request $request)
+    {
+        $rowId = $request->rowId;
+        Cart::instance('cart')->remove($rowId);
+
+        return redirect()->back();
+    }
+
+    public function checkout()
+    {
+        return view('frontend.checkout');
+    }
+
+    public function checkout_proses(Request $request)
+    {
+        $transaction = new Transaction();
+        $transaction->id = $transaction->createId();
+        $transaction->member_id = Auth::user()->id;
+        $transaction->fullname = Auth::user()->name;
+        $transaction->phone = Auth::user()->phone;
+        $transaction->address = Auth::user()->address;
+        $transaction->durasi = $request->durasi;
+        $transaction->total = Cart::instance('cart')->total('0','','');
+        $transaction->status = Transaction::NEW_ORDER;
+        $transaction->save();
+
+        $cart = Cart::instance('cart');
+        foreach ($cart->content() as $row)
+        {
+            $detail = new TransactionDetail();
+            $detail->transaction_id = $transaction->id;
+            $detail->product_id = $row->id;
+            $detail->qty = $row->qty;
+            $detail->price = $row->price;
+            $detail->total = $row->qty*$row->price;
+            $detail->save();
+
+            $product = Product::find($detail->product_id);
+            $product->stock = $product->stock-$detail->qty;
+            $product->save();
+        }
+        $cart->destroy();
+
+        return redirect()->route('finish');
+    }
+
+    public function finish()
+    {
+        return view('frontend.finish');
     }
 }

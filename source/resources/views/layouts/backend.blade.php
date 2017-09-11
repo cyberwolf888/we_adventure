@@ -151,6 +151,7 @@
 
                             @can('admin-access')
                             <li><a href="{{ route('backend.user.member.manage') }}">Member</a></li>
+                            <li><a href="{{ route('backend.user.admin.manage') }}">Admin</a></li>
                             @endcan
                         </ul>
                     </div>

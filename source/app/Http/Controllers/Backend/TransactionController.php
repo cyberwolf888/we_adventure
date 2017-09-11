@@ -30,16 +30,11 @@ class TransactionController extends Controller
     public function approve(Request $request)
     {
         $model = Transaction::findOrFail($request->transaction_id);
-        $member = User::find($model->member_id);
-        $payment = Payment::find($request->payment_id);
 
         $model->status = Transaction::VERIFIED;
         $model->save();
 
-        $payment->status = 1;
-        $payment->save();
-
-        Sms::send($member->phone, 'Psanan anda #'.$model->id.' berhasil diverifikasi.');
+        //Sms::send($member->phone, 'Psanan anda #'.$model->id.' berhasil diverifikasi.');
         return redirect()->back();
     }
 
@@ -77,12 +72,12 @@ class TransactionController extends Controller
     public function finish(Request $request)
     {
         $model = Transaction::findOrFail($request->transaction_id);
-        $member = User::find($model->member_id);
 
         $model->status = Transaction::FINISH;
+        $model->denda = $request->denda;
         $model->save();
 
-        Sms::send($member->phone, 'Psanan anda #'.$model->id.' sudah diterima.');
+        //Sms::send($member->phone, 'Psanan anda #'.$model->id.' sudah diterima.');
         return redirect()->back();
     }
 

@@ -74,10 +74,34 @@
                             <li><a href="{{ route('category',$category->id) }}">{{ $category->name }}</a></li>
                         @endforeach
                         <li><a href="{{ route('contact') }}">CONTACT</a></li>
-                        <li><a href="{{ url('login') }}">LOGIN</a></li>
-
+                        @if(Auth::check())
+                            @can('admin-access')
+                                <li><a href="{{ route('backend.dashboard') }}">ADMINISTARTOR</a></li>
+                            @endcan
+                            @can('member-access')
+                                <li><a href="#">MY ACCOUNT</a>
+                                    <ul class="dropdown">
+                                        <li><a href="{{ route('member.transaction.manage') }}">TRANSAKSI</a></li>
+                                        <li><a href="{{ route('member.profile.index') }}">ACCOUNT</a></li>
+                                        <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">LOGOUT</a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                {{ csrf_field() }}
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endcan
+                        @else
+                        <li><a href="#">MY ACCOUNT</a>
+                            <ul class="dropdown">
+                                <li><a href="{{ url('login') }}">LOGIN</a></li>
+                                <li><a href="{{ url('register') }}">REGISTER</a></li>
+                            </ul>
+                        </li>
+                        @endif
                         <!--======= Shopping Cart =========-->
-                        <li class="shop-cart"><a href="#"><i class="fa fa-shopping-cart"></i></a> <span class="numb">{{ \Cart::instance('cart')->count() }}</span>
+                        <li class="shop-cart"><a href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i></a> <span class="numb">{{ \Cart::instance('cart')->count() }}</span>
                             <ul class="dropdown">
                                 @if(\Cart::instance('cart')->count()>0)
                                     @foreach(Cart::instance('cart')->content() as $row)
@@ -94,8 +118,8 @@
                                     @endforeach
                                     <li class="no-padding no-border">
                                         <div class="row">
-                                            <div class="col-xs-6"> <a href="#" class="btn btn-small">VIEW CART</a></div>
-                                            <div class="col-xs-6 "> <a href="#" class="btn btn-1 btn-small">CHECK OUT</a></div>
+                                            <div class="col-xs-6"> <a href="{{ route('cart') }}" class="btn btn-small">VIEW CART</a></div>
+                                            <div class="col-xs-6 "> <a href="{{ route('cart') }}" class="btn btn-1 btn-small">CHECK OUT</a></div>
                                         </div>
                                     </li>
                                 @else
@@ -141,11 +165,11 @@
 
             <!--  Footer Links -->
             <div class="footer-link row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <ul>
 
                         <!--  INFOMATION -->
-                        <li class="col-sm-6">
+                        <li class="col-sm-4">
                             <h5>CATEGORY</h5>
                             <ul class="f-links">
                                 @foreach(\App\Models\Category::orderBy('created_at','DESC')->limit(6)->get() as $row)
@@ -155,34 +179,21 @@
                         </li>
 
                         <!-- MY ACCOUNT -->
-                        <li class="col-sm-6">
+                        <li class="col-sm-4">
                             <h5>MY ACCOUNT</h5>
                             <ul class="f-links">
-                                <li><a href="index-09-furniture.html#.">MY ACCOUNT</a></li>
-                                <li><a href="index-09-furniture.html#."> LOGIN</a></li>
-                                <li><a href="index-09-furniture.html#."> MY CART</a></li>
-                                <li><a href="index-09-furniture.html#."> CHECKOUT</a></li>
+                                <li><a href="{{ route('login') }}"> LOGIN</a></li>
+                                <li><a href="{{ route('register') }}">REGISTER</a></li>
+                                <li><a href="{{ route('cart') }}"> CART</a></li>
+                                <li><a href="{{ route('member.transaction.manage') }}"> TRANSAKSI</a></li>
                             </ul>
                         </li>
-                    </ul>
-                </div>
 
-                <!-- Second Row -->
-                <div class="col-md-6">
-                    <ul class="row">
-
-                        <!-- TWITTER -->
-                        <li class="col-sm-6">
-                            <h5>TWITTER</h5>
-                            <p>Check out new work on my @Behance portfolio: "BCreative_Multipurpose Theme" http://on.be.net/1zOOfBQ </p>
-                        </li>
-
-                        <!-- FLICKR PHOTO -->
-                        <li class="col-sm-6">
+                        <li class="col-sm-4">
                             <h5>LAST PRODUCT</h5>
                             <ul class="flicker">
                                 @foreach(\App\Models\Product::orderBy('created_at','DESC')->limit(6)->get() as $row)
-                                <li><a href="{{ route('product',$row->id) }}"><img src="{{ $row->getImage() }}" alt=""></a></li>
+                                    <li><a href="{{ route('product',$row->id) }}"><img src="{{ $row->getImage() }}" alt=""></a></li>
                                 @endforeach
                             </ul>
                         </li>

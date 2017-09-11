@@ -16,7 +16,7 @@ class Transaction extends Model
     const FINISH = 5; //pesanan selesai
     const CANCEL = 0; // pesanan dibatalkan
 
-    public function getStatus($index)
+    public function getStatus()
     {
         $status = [
             '0'=>'Canceled',
@@ -26,7 +26,7 @@ class Transaction extends Model
             '4'=>'Pesanan Sudah Dikirim',
             '5'=>'Transaksi Selesai'
         ];
-        return $status[$index];
+        return $status[$this->status];
     }
     public function createId()
     {

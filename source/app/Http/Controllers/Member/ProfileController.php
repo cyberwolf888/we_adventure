@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers\Member;
 
-use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -10,22 +9,39 @@ use Validator;
 
 class ProfileController extends Controller
 {
+
     public function index()
     {
-        $model = Auth::user();
-        return view('backend.profile.form',[
-            'model'=>$model
-        ]);
+        return view('member.profile.form');
     }
 
-    public function update(Request $request, $id)
+    public function create()
     {
-        $user = User::findOrFail($id);
+        //
+    }
+
+    public function store(Request $request)
+    {
+        //
+    }
+
+    public function show($id)
+    {
+        //
+    }
+
+    public function edit($id)
+    {
+        //
+    }
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
         $filter = [
-            'fullname' => 'required|max:255',
+            'name' => 'required|max:255',
             'phone' => 'required',
-            'address' => 'required',
-            'city' => 'required'
+            'address' => 'required'
         ];
 
         if($request->email === $user->email){
@@ -43,16 +59,20 @@ class ProfileController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                ->route('backend.profile.index')
+                ->route('member.profile.index')
                 ->withErrors($validator)
                 ->withInput();
         }
-
-        $user->name = $request->fullname;
+        $user->name = $request->name;
         $user->phone = $request->phone;
         $user->address = $request->address;
         $user->save();
 
-        return redirect()->route('backend.profile.index')->with('success', 'Update profile!');
+        return redirect()->back()->with('berhasil','Profile anda berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        //
     }
 }

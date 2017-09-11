@@ -18,7 +18,13 @@ Route::get('/contact', 'HomeController@contact')->name('contact');
 Route::get('/category/{id}', 'HomeController@category')->name('category');
 Route::get('/product/{id}', 'HomeController@product')->name('product');
 Route::get('/search', 'HomeController@search')->name('search');
+Route::get('/cart', 'HomeController@cart')->name('cart');
 Route::post('/cart_add', 'HomeController@cart_add')->name('cart_add');
+Route::get('/cart_delete', 'HomeController@cart_delete')->name('cart_delete');
+Route::get('/cart_clear', 'HomeController@cart_clear')->name('cart_clear');
+Route::get('/checkout', 'HomeController@checkout')->name('checkout')->middleware(['auth','role:member-access']);
+Route::post('/checkout', 'HomeController@checkout_proses')->name('checkout_proses')->middleware(['auth','role:member-access']);
+Route::get('/finish', 'HomeController@finish')->name('finish')->middleware(['auth','role:member-access']);
 
 //Backend
 Route::group(['prefix' => 'backend', 'middleware' => ['auth','role:admin-access|owner-access'], 'as'=>'backend'], function() {
@@ -126,16 +132,14 @@ Route::group(['prefix' => 'backend', 'middleware' => ['auth','role:admin-access|
 
 //Member
 Route::group(['prefix' => 'member', 'middleware' => ['auth','role:member-access'], 'as'=>'member'], function() {
-    Route::get('/', 'Member\DashboardController@index')->name('.dashboard');
 
-    Route::group(['prefix' => 'transaction', 'as'=>'.transaction'], function() {
-        Route::get('/', 'Member\TransactionController@index')->name('.manage');
-        Route::get('/detail/{id}', 'Member\TransactionController@show')->name('.show');
-        Route::post('/approve', 'Member\TransactionController@approve')->name('.approve');
+    Route::group(['prefix' => 'transaksi', 'as'=>'.transaction'], function() {
+        Route::get('/', 'Member\TransaksiController@index')->name('.manage');
+        Route::get('/detail/{id}', 'Member\TransaksiController@show')->name('.show');
     });
 
     Route::group(['prefix' => 'profile', 'as'=>'.profile'], function() {
         Route::get('/', 'Member\ProfileController@index')->name('.index');
-        Route::post('/edit/{id}', 'Member\ProfileController@update')->name('.update');
+        Route::post('/', 'Member\ProfileController@update')->name('.update');
     });
 });

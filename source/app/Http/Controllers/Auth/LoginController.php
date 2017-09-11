@@ -47,10 +47,6 @@ class LoginController extends Controller
             return redirect()->intended('/backend');
         }
 
-        if($user->can('member-access')) {
-            return redirect()->intended('/member');
-        }
-
         return redirect()->intended('/');
     }
 }
