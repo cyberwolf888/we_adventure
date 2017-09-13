@@ -74,10 +74,12 @@
                                     <h5>DETAIL PESANAN</h5>
                                     <div class="order-detail">
                                         <p>PRODUCT <span>TOTAL</span></p>
+                                        <?php $subtotal = 0; ?>
                                         @foreach($model->transaction_detail as $row)
+                                            <?php $subtotal+= $row->total; ?>
                                             <div class="item-order">
                                                 <p>{{ $row->product->name }} <span class="color"> x{{ $row->qty }} </span></p>
-                                                <p class="text-right">IDR {{ number_format($row->total) }}</p>
+                                                <p class="text-right">IDR {{ number_format($row->total) }} x {{ $model->durasi }} Hari = {{ number_format($row->total*$model->durasi) }}</p>
                                             </div>
                                         @endforeach
                                         <p>CART SUBTOTAL <span>IDR {{ number_format($model->total,0,',','.') }}</span></p>

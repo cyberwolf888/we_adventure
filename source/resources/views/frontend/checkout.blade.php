@@ -58,7 +58,7 @@
                                     <ul class="row">
                                         <li class="col-md-12">
                                             <label> *DURASI SEWA
-                                                <select class="selectpicker" name="durasi">
+                                                <select class="selectpicker" name="durasi" id="durasi">
                                                     @for($i=1; $i<=7; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Hari</option>
                                                     @endfor
@@ -101,8 +101,8 @@
                                             <p class="text-right">IDR {{ number_format($cart->price*$cart->qty) }}</p>
                                         </div>
                                         @endforeach
-                                        <p>CART SUBTOTAL <span>IDR {{ \Cart::instance('cart')->subTotal() }}</span></p>
-                                        <p>ORDER TOTAL <span>IDR {{ \Cart::instance('cart')->total() }}</span></p>
+                                        <p>CART SUBTOTAL <span id="subtotal">IDR {{ \Cart::instance('cart')->subTotal() }}</span></p>
+                                        <p>ORDER TOTAL <span id="ordertotal">IDR {{ \Cart::instance('cart')->total() }}</span></p>
                                     </div>
                                     <div class="pay-meth">
                                         <h5>PENTING</h5>
@@ -129,4 +129,11 @@
 @endpush
 
 @push('scripts')
+<script>
+    $("#durasi").change(function () {
+        var total = <?= \Cart::instance('cart')->total(0,'','') ?>;
+        var ototal = total*$("#durasi").val();
+        $("#ordertotal").empty().append('IDR '+ototal.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1."));
+    });
+</script>
 @endpush

@@ -120,7 +120,7 @@ class HomeController extends Controller
         $transaction->phone = Auth::user()->phone;
         $transaction->address = Auth::user()->address;
         $transaction->durasi = $request->durasi;
-        $transaction->total = Cart::instance('cart')->total('0','','');
+        $transaction->total = Cart::instance('cart')->total('0','','')*$request->durasi;
         $transaction->status = Transaction::NEW_ORDER;
         $transaction->save();
 
