@@ -26,6 +26,11 @@ class Product extends Model
     public function getImage()
     {
         $image = ProductImages::where('product_id',$this->id)->first();
-        return url('assets/img/product/'.$this->id.'/thumb_'.$image->image);
+        if($image->count()>0){
+            return url('assets/img/product/'.$this->id.'/thumb_'.$image->image);
+        }else{
+            return '';
+        }
+
     }
 }
