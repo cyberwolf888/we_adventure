@@ -34,7 +34,8 @@ class ReportController extends Controller
             'model'=>$model,
             'start_date'=>$start_date,
             'end_date'=>$end_date,
-            'total'=>$total
+            'total'=>$total,
+            'count'=>$count
         ]);
     }
 }

@@ -21,7 +21,7 @@
                                 </li>
                                 <li class="collection-item">
                                     <span class="grey-text text-lighten-1">Category</span><br>
-                                    <b>{{ $model->category_id }}</b>
+                                    <b>{{ $model->category->name }}</b>
                                 </li>
                                 <li class="collection-item">
                                     <span class="grey-text text-lighten-1">Price</span><br>
@@ -40,7 +40,7 @@
                                     <b>{{ $model->available == 1 ? 'Yes' : 'No' }}</b>
                                 </li>
                                 <li class="collection-item">
-                                    <span class="grey-text text-lighten-1">description</span><br>
+                                    <span class="grey-text text-lighten-1">Description</span><br>
                                     <b>{{ $model->description }}</b>
                                 </li>
                             </ul>

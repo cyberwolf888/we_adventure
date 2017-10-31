@@ -38,7 +38,10 @@
                                     {!! Form::label('status', 'Status') !!}
                                     {!! Form::select('status', [
                                                                         '6'=>'All Status',
-                                                                        '4'=>'Complete Order'
+                                                                        '0'=>'Canceled',
+                                                                        '1'=>'Menunggu Pembayaran',
+                                                                        '3'=>'Pesanan Sedang Diproses',
+                                                                        '5'=>'Complete Order'
                                                                     ], null) !!}
 
                                 </div>
