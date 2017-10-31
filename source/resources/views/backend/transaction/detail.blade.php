@@ -14,7 +14,7 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
-                            @if($model->status != \App\Models\Transaction::CANCEL && $model->status != \App\Models\Transaction::VERIFIED)
+                            @if($model->status != \App\Models\Transaction::CANCEL && $model->status != \App\Models\Transaction::VERIFIED && $model->status != \App\Models\Transaction::FINISH)
                                 <a class="waves-effect waves-light btn blue modal-trigger" href="#modal_shipped"><i class="material-icons left">done</i>Verfikasi Transaksi</a>
                             @endif
                             @if($model->status != \App\Models\Transaction::CANCEL && $model->status == \App\Models\Transaction::VERIFIED)

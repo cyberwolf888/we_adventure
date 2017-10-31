@@ -1,8 +1,8 @@
 @extends('layouts.backend')
 
 @push('plugin_css')
-<link href="{{ url('assets/master') }}/plugins/sweetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
-<link href="{{ url('assets/master') }}/plugins/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="{{ url('assets/backend') }}/plugins/sweetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
+<link href="{{ url('assets/backend') }}/plugins/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -62,12 +62,12 @@
 @endsection
 
 @push('plugin_scripts')
-<script src="{{ url('assets/master') }}/plugins/sweetalert/sweetalert.min.js"></script>
-<script src="{{ url('assets/master') }}/plugins/datatables/js/jquery.dataTables.min.js"></script>
+<script src="{{ url('assets/backend') }}/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="{{ url('assets/backend') }}/plugins/datatables/js/jquery.dataTables.min.js"></script>
 @endpush
 
 @push('scripts')
-<script src="{{ url('assets/master') }}/js/pages/table-data.js"></script>
+<script src="{{ url('assets/backend') }}/js/pages/table-data.js"></script>
 <script>
     @if (session('success'))
         $(document).ready(function () {
